@@ -1,8 +1,9 @@
-use rocket::serde::{json::Json, Deserialize};
 use rocket::http::Status;
 use rocket::response::{content, status};
+use rocket::serde::{json::Json, Deserialize};
 
-#[macro_use] extern crate rocket;
+#[macro_use]
+extern crate rocket;
 
 #[get("/get/hello_world")]
 fn index() -> &'static str {
@@ -15,12 +16,15 @@ struct Request {
     string: String,
 }
 
-#[post("/post/hello_world", format = "json", data="<request>")]
-fn new(request: Json<Request>) ->  status::Custom<content::RawJson<&'static str>> {    
-     if request.string == *"Hello world!" {
+#[post("/post/hello_world", format = "json", data = "<request>")]
+fn new(request: Json<Request>) -> status::Custom<content::RawJson<&'static str>> {
+    if request.string == *"Hello world!" {
         return status::Custom(Status::Accepted, content::RawJson("{ \"success\": true }"));
-     }
-     status::Custom(Status::BadRequest, content::RawJson("{ \"success\": false }"))
+    }
+    status::Custom(
+        Status::BadRequest,
+        content::RawJson("{ \"success\": false }"),
+    )
 }
 
 #[launch]
